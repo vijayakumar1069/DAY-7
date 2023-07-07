@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var h = new XMLHttpRequest();
+      var method = "get";
+      var url = "https://restcountries.com/v3.1/all";
+      h.open(method, url, true);
+      h.onload = function () {
+        if (h.status == 200) {
+          var data = JSON.parse(h.responseText);
+          console.log(data); //250
+          console.log(
+            ".................................ALL COUNTRY NAME.................................................."
+          );
+          let newArray = data.filter(
+            (d) => d.continents[0] == "Asia" || d.region == "Asia"
+          );
+
+          for (var i = 0; i < newArray.length; i++) {
+            console.log(newArray[i].name.common);
+          }
+          console.log(
+            ".............................POPULATION LESS THAN 200000..........................."
+          );
+          //console.log(newArray)
+          let populatincount = data.filter((d) => d.population <= 200000);
+
+          for (let i = 0; i < populatincount.length; i++) {
+            console.log(populatincount[i].name.common);
+          }
+          console.log(
+            ".........................COUNTRY NAME , CAPITAL , FLAG..............................."
+          );
+          data.forEach((element) => {
+            var name = element.name.common;
+            var cap = element.capital;
+            var flag = element.flag;
+            console.log(
+              `country name= ${name} || capital name= ${cap} || flag= ${flag}`
+            );
+          });
+          console.log(
+            ".............................TOTAL POPULATION..........................."
+          );
+
+          var totalpopulation = data.reduce(function (total, item) {
+            return total + item.population;
+          });
+          console.log(totalpopulation);
+          console.log(
+            "..........................US DOLLAR CURRENCY USING COUNTRY........."
+          );
+          const datas = data
+            .filter((item) => item?.currencies?.USD)
+            .map((value) => value.name.common);
+          console.log("datas", datas.join(" ---- "));
+        }
+      };
+      h.send();
+    </script>
+  </body>
+</html>
